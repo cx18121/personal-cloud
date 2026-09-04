@@ -115,16 +115,26 @@ fi
 "$HOME/.local/bin/mise" exec -- pi update --extensions --approve
 
 path_line='export PATH="$HOME/.local/bin:$PATH"'
-if ! grep -Fqx "$path_line" "$HOME/.bash_profile" 2>/dev/null; then
-  profile_tmp=$(mktemp)
-  printf '%s\n' "$path_line" > "$profile_tmp"
-  [[ ! -f "$HOME/.bash_profile" ]] || cat "$HOME/.bash_profile" >> "$profile_tmp"
-  mv "$profile_tmp" "$HOME/.bash_profile"
-fi
 
-if ! grep -Fqx "$path_line" "$HOME/.bashrc" 2>/dev/null; then
-  printf '\n%s\n' "$path_line" >> "$HOME/.bashrc"
-fi
+# The line must come first in each file. mise writes its own activation block,
+# and activation calls `mise`, which lives in ~/.local/bin. Appending the PATH
+# line instead leaves activation running before mise is findable, which fails
+# on every shell and prints Ubuntu's "Command 'mise' not found" suggestion.
+ensure_path_first() {
+  local file="$1"
+  local tmp
+  tmp=$(mktemp)
+  printf '%s\n' "$path_line" > "$tmp"
+  if [[ -f "$file" ]]; then
+    # Drop earlier copies so reruns cannot stack duplicates.
+    grep -Fxv "$path_line" "$file" >> "$tmp" || true
+  fi
+  install -m 0644 "$tmp" "$file"
+  rm -f "$tmp"
+}
+
+ensure_path_first "$HOME/.bash_profile"
+ensure_path_first "$HOME/.bashrc"
 
 # The warning must live on the root volume. A copy under $HOME is invisible in the
 # exact state it exists to report, because $HOME is on the volume that is missing.
