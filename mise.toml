@@ -1,0 +1,30 @@
+[tools]
+terraform = "1.5.7"
+
+[tasks.preflight]
+description = "Verify the personal AWS account and region"
+run = "./scripts/preflight.sh"
+
+[tasks.init]
+description = "Initialize Terraform providers"
+depends = ["preflight"]
+dir = "infra"
+run = "terraform init"
+
+[tasks.plan]
+description = "Plan the personal cloud infrastructure"
+depends = ["preflight"]
+dir = "infra"
+run = "terraform plan -out=personal-cloud.tfplan"
+
+[tasks.apply]
+description = "Apply the reviewed personal cloud plan"
+depends = ["preflight"]
+dir = "infra"
+run = "terraform apply personal-cloud.tfplan"
+
+[tasks.output]
+description = "Show connection details"
+depends = ["preflight"]
+dir = "infra"
+run = "terraform output"

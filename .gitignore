@@ -1,0 +1,7 @@
+.DS_Store
+mise.local.toml
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfplan
+crash.log

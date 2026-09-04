@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+set -euxo pipefail
+
+hostnamectl set-hostname personal-cloud
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get install -y ca-certificates curl git jq rsync unzip build-essential pkg-config libssl-dev sqlite3
+
+root_source=$(readlink -f "$(findmnt -n -o SOURCE /)")
+root_parent=$(lsblk -no PKNAME "$root_source" | head -n 1)
+root_disk="/dev/$root_parent"
+data_device=""
+
+for _ in $(seq 1 120); do
+  while read -r candidate kind; do
+    if [ "$kind" = "disk" ] && [ "$candidate" != "$root_disk" ]; then
+      data_device="$candidate"
+      break
+    fi
+  done < <(lsblk -dpno NAME,TYPE)
+  [ -n "$data_device" ] && break
+  sleep 5
+done
+
+if [ -z "$data_device" ]; then
+  echo "Persistent data volume was not attached in time" >&2
+  exit 1
+fi
+
+fresh_volume=false
+if ! blkid -s TYPE -o value "$data_device" >/dev/null 2>&1; then
+  mkfs.ext4 -L personal-home "$data_device"
+  fresh_volume=true
+fi
+
+mkdir -p /mnt/personal-home
+mount "$data_device" /mnt/personal-home
+if [ "$fresh_volume" = true ]; then
+  rsync -aHAX /home/ /mnt/personal-home/
+fi
+umount /mnt/personal-home
+
+uuid=$(blkid -s UUID -o value "$data_device")
+if ! grep -q "UUID=$uuid" /etc/fstab; then
+  printf 'UUID=%s /home ext4 defaults,nofail,x-systemd.device-timeout=2min 0 2\n' "$uuid" >> /etc/fstab
+fi
+mount /home
+
+curl -fsSL https://tailscale.com/install.sh | sh
+systemctl enable --now tailscaled
+
+systemctl enable --now snap.amazon-ssm-agent.amazon-ssm-agent.service || true
+mkdir -p /var/lib/personal-cloud
+touch /var/lib/personal-cloud/cloud-init-complete

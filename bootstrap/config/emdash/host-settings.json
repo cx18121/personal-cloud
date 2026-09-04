@@ -1,0 +1,4 @@
+{
+  "tmux": false,
+  "shellSetup": "export PATH=\"$HOME/.local/bin:$PATH\"\neval \"$($HOME/.local/bin/mise activate bash)\""
+}

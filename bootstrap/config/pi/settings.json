@@ -1,0 +1,49 @@
+{
+  "theme": "dark",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.6-sol",
+  "defaultThinkingLevel": "high",
+  "enabledModels": [
+    "anthropic/claude-fable-5",
+    "anthropic/claude-opus-5",
+    "openai-codex/gpt-5.6-sol",
+    "openai-codex/gpt-5.6-luna",
+    "openai-codex/gpt-5.6-terra"
+  ],
+  "showHardwareCursor": false,
+  "outputPad": 1,
+  "terminal": {
+    "showTerminalProgress": false
+  },
+  "compaction": {
+    "enabled": true,
+    "reserveTokens": 128000,
+    "keepRecentTokens": 20000
+  },
+  "doubleEscapeAction": "tree",
+  "tuiMode": "regular",
+  "fullscreenScrollbar": "auto",
+  "editorPaddingX": 1,
+  "packages": [
+    {
+      "source": "git:https://github.com/cx18121/pi-personal",
+      "extensions": [
+        "-extensions/apple-notes.ts",
+        "-extensions/core-mcp.ts",
+        "-extensions/reminders.ts"
+      ]
+    },
+    "npm:@juicesharp/rpiv-todo",
+    "npm:pi-web-access",
+    "npm:@narumitw/pi-goal@0.51.0",
+    "npm:@ff-labs/pi-fff",
+    "npm:@tmustier/pi-usage-extension@0.9.4",
+    "npm:pi-slopchop@0.10.1",
+    "npm:@juicesharp/rpiv-ask-user-question@2.8.0",
+    "npm:@aliou/pi-processes",
+    "npm:@ogulcancelik/pi-codex-compaction",
+    "npm:@ogulcancelik/pi-session-recall",
+    "npm:@ogulcancelik/pi-herdr-worktree-jump",
+    "npm:@ogulcancelik/pi-codex-subagents"
+  ]
+}
