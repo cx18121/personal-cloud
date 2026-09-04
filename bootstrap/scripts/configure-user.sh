@@ -51,6 +51,15 @@ if [[ "${#tool_specs[@]}" -eq 0 ]]; then
 fi
 "$HOME/.local/bin/mise" use -g "${tool_specs[@]}"
 
+# Earlier bootstraps pinned the published Herdr, which speaks an older wire
+# protocol than Charlie's fork while reporting the same version number. mise
+# activation re-prepends its shim directory ahead of ~/.local/bin, so leaving
+# any trace of it would shadow the matching build from scripts/sync-herdr.sh.
+# Remove the pin, the installed copy, and the stale shim so only one herdr exists.
+"$HOME/.local/bin/mise" unuse -g herdr 2>/dev/null || true
+"$HOME/.local/bin/mise" uninstall --all herdr 2>/dev/null || true
+rm -f "$HOME/.local/share/mise/shims/herdr"
+
 python3 - "$pi_dir/settings.json" "$config_dir/pi/settings.json" <<'PY'
 import json
 import os
