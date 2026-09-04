@@ -47,7 +47,10 @@ Description=Emdash workspace server
 After=network-online.target
 Wants=network-online.target
 RequiresMountsFor=/home
-ConditionPathIsMountPoint=/home
+# Assert rather than Condition. A failed condition skips the unit silently, so a
+# lost boot race against the /home mount would look like Emdash simply missing.
+# A failed assertion leaves a visible failed unit instead.
+AssertPathIsMountPoint=/home
 StartLimitIntervalSec=60
 StartLimitBurst=5
 
