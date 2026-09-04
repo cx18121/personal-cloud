@@ -32,24 +32,20 @@ mkdir -p \
 
 git config --global init.defaultBranch main
 
-mapfile -t tool_specs < <(python3 - "$script_dir/../mise.toml" <<'PY'
-import sys
-import tomllib
-from pathlib import Path
-
-config = tomllib.loads(Path(sys.argv[1]).read_text())
-for name, version in config["tools"].items():
-    if not isinstance(version, str):
-        raise SystemExit(f"tool {name} must pin a string version")
-    print(f"{name}@{version}")
-PY
-)
-# mapfile swallows the producer's exit status, so assert the result instead.
-if [[ "${#tool_specs[@]}" -eq 0 ]]; then
-  printf 'Could not read the [tools] table from bootstrap/mise.toml\n' >&2
+# Tools and linked configuration both come from the dotfiles repository, so
+# this host reads the same lists as every other machine.
+if [[ ! -x "$HOME/dotfiles/install.sh" ]]; then
+  printf 'Missing dotfiles installer at %s/dotfiles/install.sh\n' "$HOME" >&2
   exit 1
 fi
-"$HOME/.local/bin/mise" use -g "${tool_specs[@]}"
+
+# Earlier bootstraps wrote these as real files. stow refuses to link over a
+# real file, so clear the ones this repository used to own.
+for stow_target in "$pi_dir/AGENTS.md"; do
+  [[ -f "$stow_target" && ! -L "$stow_target" ]] && rm -f "$stow_target"
+done
+
+"$HOME/dotfiles/install.sh" --profile linux
 
 # Earlier bootstraps pinned the published Herdr, which speaks an older wire
 # protocol than Charlie's fork while reporting the same version number. mise
@@ -79,8 +75,6 @@ temporary = output.with_suffix(".json.tmp")
 temporary.write_text(json.dumps(settings, indent=2) + "\n")
 os.replace(temporary, output)
 PY
-
-install -m 0644 "$config_dir/pi/AGENTS.md" "$pi_dir/AGENTS.md"
 
 if [[ ! -d "$shared_skills" ]]; then
   printf 'Missing shared skills repository: %s\n' "$shared_skills" >&2

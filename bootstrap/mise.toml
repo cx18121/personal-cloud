@@ -1,18 +1,6 @@
-[tools]
-node = "22.22.3"
-bun = "1.3.13"
-pnpm = "11.20.0"
-go = "1.26"
-rust = "1.97.1"
-uv = "0.11.7"
-gh = "2.98.0"
-rg = "14.1.1"
-fd = "10.3.0"
-# Zig builds Herdr's vendored libghostty-vt. Herdr itself is not listed here:
-# the published release speaks an older wire protocol than Charlie's fork, so
-# scripts/sync-herdr.sh builds the matching commit instead.
-zig = "0.15.2"
-"npm:@earendil-works/pi-coding-agent" = "0.84.4"
+# Tool pins live in the dotfiles repository under profiles.toml, so every
+# machine reads one list. The bootstrap task applies them by running
+# `dotfiles/install.sh --profile linux`.
 
 [bootstrap.packages]
 "apt:build-essential" = "latest"
@@ -26,6 +14,8 @@ zig = "0.15.2"
 "apt:pkg-config" = "latest"
 "apt:rsync" = "latest"
 "apt:sqlite3" = "latest"
+# stow links the dotfiles packages selected by the linux profile.
+"apt:stow" = "latest"
 "apt:tmux" = "latest"
 "apt:unzip" = "latest"
 "apt:zip" = "latest"
@@ -34,6 +24,7 @@ zig = "0.15.2"
 "~/Projects/personal/pi-personal" = { url = "https://github.com/cx18121/pi-personal.git" }
 "~/Projects/personal/herdr-personal" = { url = "https://github.com/cx18121/herdr-personal.git" }
 "~/Projects/personal/agent-skills" = { url = "https://github.com/cx18121/agent-skills.git" }
+"~/dotfiles" = { url = "https://github.com/cx18121/dotfiles.git" }
 
 [bootstrap.mise_shell_activate]
 bash_profile = "shims"
