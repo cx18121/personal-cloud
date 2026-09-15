@@ -5,7 +5,10 @@
 [bootstrap.packages]
 "apt:build-essential" = "latest"
 "apt:ca-certificates" = "latest"
+"apt:containerd.io" = "latest"
 "apt:curl" = "latest"
+# Docker engine runs self-hosted services such as open-mailtrack. The Docker apt repo is added by the Pango dev setup.
+"apt:docker-ce" = "latest"
 "apt:git" = "latest"
 "apt:jq" = "latest"
 "apt:libicu-dev" = "latest"
