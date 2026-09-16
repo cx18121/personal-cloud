@@ -32,7 +32,14 @@ fi
 mkdir -p "$managed_skills" "$skills_dir"
 git config --global init.defaultBranch main
 
-"$mise" -C "$dotfiles" -E linux bootstrap --locked --force-dotfiles --update --yes
+# The previous bootstrap generated this as a real file. The shared dotfiles
+# project now owns it as a symlink, so remove only that known legacy shape.
+mise_config="$HOME/.config/mise/config.toml"
+if [[ -e "$mise_config" && ! -L "$mise_config" ]]; then
+  rm -f "$mise_config"
+fi
+
+"$mise" -C "$dotfiles" -E linux bootstrap --locked --update --yes
 
 # The packaged PDF skill is not part of the shared agent-skills repository.
 rm -rf "$managed_skills/pdf"
