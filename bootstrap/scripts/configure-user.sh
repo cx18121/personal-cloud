@@ -39,8 +39,18 @@ if [[ -e "$mise_config" && ! -L "$mise_config" ]]; then
   rm -f "$mise_config"
 fi
 
-rpiv_target="$HOME/.config/rpiv-todo/config.json"
-rpiv_source="$dotfiles/pi/.config/rpiv-todo/config.json"
+rpiv_dir="$HOME/.config/rpiv-todo"
+rpiv_source_dir="$dotfiles/pi/.config/rpiv-todo"
+if [[ -L "$rpiv_dir" ]]; then
+  if [[ "$(readlink -f "$rpiv_dir")" != "$rpiv_source_dir" ]]; then
+    printf 'Refusing to replace unexpected rpiv-todo link: %s\n' "$rpiv_dir" >&2
+    exit 1
+  fi
+  rm "$rpiv_dir"
+fi
+
+rpiv_target="$rpiv_dir/config.json"
+rpiv_source="$rpiv_source_dir/config.json"
 if [[ -f "$rpiv_target" && ! -L "$rpiv_target" ]]; then
   if ! cmp -s "$rpiv_target" "$rpiv_source"; then
     printf 'Refusing to replace changed rpiv-todo config: %s\n' "$rpiv_target" >&2
