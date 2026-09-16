@@ -32,7 +32,7 @@ fi
 mkdir -p "$managed_skills" "$skills_dir"
 git config --global init.defaultBranch main
 
-"$mise" -C "$dotfiles" -E linux bootstrap --locked --force-dotfiles --yes
+"$mise" -C "$dotfiles" -E linux bootstrap --locked --force-dotfiles --update --yes
 
 # The packaged PDF skill is not part of the shared agent-skills repository.
 rm -rf "$managed_skills/pdf"
