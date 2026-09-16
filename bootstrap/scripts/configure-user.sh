@@ -39,6 +39,16 @@ if [[ -e "$mise_config" && ! -L "$mise_config" ]]; then
   rm -f "$mise_config"
 fi
 
+rpiv_target="$HOME/.config/rpiv-todo/config.json"
+rpiv_source="$dotfiles/pi/.config/rpiv-todo/config.json"
+if [[ -f "$rpiv_target" && ! -L "$rpiv_target" ]]; then
+  if ! cmp -s "$rpiv_target" "$rpiv_source"; then
+    printf 'Refusing to replace changed rpiv-todo config: %s\n' "$rpiv_target" >&2
+    exit 1
+  fi
+  rm -f "$rpiv_target"
+fi
+
 "$mise" -C "$dotfiles" -E linux bootstrap --locked --update --yes
 
 # The packaged PDF skill is not part of the shared agent-skills repository.
