@@ -48,9 +48,9 @@ After the Mac is connected to the same tailnet, bootstrap the developer environm
 ./scripts/bootstrap-remote.sh
 ```
 
-The bootstrap applies the versioned Pi settings, global instructions, shared skills, packages, tools, and repository list. It intentionally does not copy credentials, provider logins, sessions, memory, caches, run history, or trust decisions. The personal cloud package configuration excludes Pango MCP integrations and macOS-only integrations.
+The remote bootstrap is an AWS-host adapter. It verifies the persistent `/home` volume, installs host prerequisites, updates the durable `~/dotfiles` checkout, and delegates the complete Linux developer environment to that repository's locked mise bootstrap. It then applies only personal-cloud safeguards and Emdash service setup.
 
-This is the same role Nix would otherwise play for this host, without adding another package manager. Update files under `bootstrap/config` and rerun the bootstrap to apply a configuration change.
+Shared tools, repositories, dotfiles, Pi settings, Herdr, and agent skills are owned by `cx18121/dotfiles` and their app repositories. Credentials, provider logins, sessions, memory, caches, run history, and trust decisions are not copied.
 
 ## Emdash
 

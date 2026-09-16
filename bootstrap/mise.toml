@@ -1,38 +1,18 @@
-# Tool pins live in the dotfiles repository under profiles.toml, so every
-# machine reads one list. The bootstrap task applies them by running
-# `dotfiles/install.sh --profile linux`.
+# This project is the AWS-host adapter. Shared tools, repositories, dotfiles,
+# Pi, Herdr, and skills come from the durable ~/dotfiles checkout.
 
 [bootstrap.packages]
-"apt:build-essential" = "latest"
+# Required before the shared bootstrap can clone and run.
 "apt:ca-certificates" = "latest"
-"apt:containerd.io" = "latest"
 "apt:curl" = "latest"
-# Docker engine runs self-hosted services such as open-mailtrack. The Docker apt repo is added by the Pango dev setup.
-"apt:docker-ce" = "latest"
 "apt:git" = "latest"
-"apt:jq" = "latest"
-"apt:libicu-dev" = "latest"
-"apt:libssl-dev" = "latest"
-"apt:lsof" = "latest"
-"apt:pkg-config" = "latest"
-"apt:rsync" = "latest"
-"apt:sqlite3" = "latest"
-# stow links the dotfiles packages selected by the linux profile.
-"apt:stow" = "latest"
-"apt:tmux" = "latest"
-"apt:unzip" = "latest"
-"apt:zip" = "latest"
+# Host-specific Docker packages. The Docker apt repository is added by the Pango setup.
+"apt:containerd.io" = "latest"
+"apt:docker-ce" = "latest"
 
 [bootstrap.repos]
-"~/Projects/personal/pi-personal" = { url = "https://github.com/cx18121/pi-personal.git" }
-"~/Projects/personal/herdr-personal" = { url = "https://github.com/cx18121/herdr-personal.git" }
-"~/Projects/personal/agent-skills" = { url = "https://github.com/cx18121/agent-skills.git" }
 "~/dotfiles" = { url = "https://github.com/cx18121/dotfiles.git" }
 
-[bootstrap.mise_shell_activate]
-bash_profile = "shims"
-bashrc = "activate"
-
 [tasks.bootstrap]
-description = "Finish the personal cloud developer setup"
+description = "Apply shared development setup and AWS-host safeguards"
 run = "./scripts/configure-user.sh"
