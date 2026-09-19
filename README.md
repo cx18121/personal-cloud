@@ -1,6 +1,6 @@
 # Personal cloud
 
-This repository provisions and configures Charlie's private remote development host.
+This repository provisions and configures my private remote development host.
 
 ## Boundaries
 
