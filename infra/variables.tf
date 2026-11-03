@@ -23,7 +23,7 @@ variable "instance_type" {
 variable "data_volume_size" {
   description = "Persistent home volume size in GiB."
   type        = number
-  default     = 300
+  default     = 50
 }
 
 variable "home_snapshot_id" {

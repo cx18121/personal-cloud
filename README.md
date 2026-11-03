@@ -20,7 +20,7 @@ The Terraform configuration creates:
 - One `t3a.small` Ubuntu 24.04 instance. It hosts open-mailtrack and occasional remote work, so 2 GiB of memory is enough.
 - A VPC and public subnet with no inbound security-group rules.
 - A 30 GiB encrypted root volume.
-- A separate 300 GiB encrypted volume mounted at `/home` and protected from Terraform deletion.
+- A separate 50 GiB encrypted volume mounted at `/home` and protected from Terraform deletion.
 - Fourteen daily EBS snapshots of the home volume.
 - An instance role limited to Systems Manager core access.
 - A gross monthly budget with alerts at $200, forecasted $250, and actual $300.

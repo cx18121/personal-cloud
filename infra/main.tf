@@ -174,7 +174,7 @@ resource "aws_ebs_volume" "home" {
 }
 
 resource "aws_volume_attachment" "home" {
-  device_name  = "/dev/sdf"
+  device_name  = "/dev/sdg"
   volume_id    = aws_ebs_volume.home.id
   instance_id  = aws_instance.workbox.id
   force_detach = false
