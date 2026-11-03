@@ -17,7 +17,7 @@ variable "budget_email" {
 variable "instance_type" {
   description = "EC2 instance type for the development host."
   type        = string
-  default     = "m7i.xlarge"
+  default     = "t3a.small"
 }
 
 variable "data_volume_size" {

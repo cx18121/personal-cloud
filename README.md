@@ -17,7 +17,7 @@ The AWS provider refuses to run outside the dedicated `personal-cloud` account i
 
 The Terraform configuration creates:
 
-- One `m7i.xlarge` Ubuntu 24.04 instance.
+- One `t3a.small` Ubuntu 24.04 instance. It hosts open-mailtrack and occasional remote work, so 2 GiB of memory is enough.
 - A VPC and public subnet with no inbound security-group rules.
 - A 30 GiB encrypted root volume.
 - A separate 300 GiB encrypted volume mounted at `/home` and protected from Terraform deletion.
